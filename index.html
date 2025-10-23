@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Moje BIO — Supabase (personalizowalne)</title>
+  <meta name="description" content="Strona bio z projektami podłączona do Supabase — logowanie email i Google, motywy kolorystyczne" />
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --accent:#06b6d4; --muted:#94a3b8; --glass:rgba(255,255,255,0.03);
+      --accent-start: #06b6d4; --accent-end: #7dd3fc;
+      color-scheme: dark;
+    }
+    [data-theme="turkus"]{ --accent-start:#06b6d4; --accent-end:#7dd3fc }
+    [data-theme="fiolet"]{ --accent-start:#7c3aed; --accent-end:#a78bfa }
+    [data-theme="czerwony"]{ --accent-start:#ef4444; --accent-end:#fb7185 }
+    [data-theme="niebieski"]{ --accent-start:#2563eb; --accent-end:#60a5fa }
+    [data-theme="zielony"]{ --accent-start:#16a34a; --accent-end:#86efac }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial;background:linear-gradient(180deg,var(--bg),#071021);color:#e6eef6;-webkit-font-smoothing:antialiased}
+    .container{max-width:980px;margin:36px auto;padding:20px}
+    header{display:flex;gap:16px;align-items:center}
+    .avatar{width:96px;height:96px;border-radius:14px;background:linear-gradient(135deg,var(--accent-start),var(--accent-end));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:28px;box-shadow:0 6px 18px rgba(2,6,23,0.6)}
+    h1{margin:0;font-size:28px}
+    p.lead{color:var(--muted);margin:6px 0 18px}
+    .card{background:var(--card);padding:16px;border-radius:12px;box-shadow:0 6px 18px rgba(2,6,23,0.6);margin-bottom:18px}
+    .socials{display:flex;gap:8px;flex-wrap:wrap}
+    .socials a{padding:8px 12px;border-radius:8px;background:var(--glass);text-decoration:none;color:inherit;font-weight:600}
+    .grid{display:grid;grid-template-columns:1fr 330px;gap:18px}
+    .projects-list{display:flex;flex-direction:column;gap:12px}
+    .project{padding:12px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);}
+    .meta{color:var(--muted);font-size:13px}
+    form{display:flex;flex-direction:column;gap:8px}
+    input,textarea,select{padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+    button{background:linear-gradient(90deg,var(--accent-start),var(--accent-end));border:none;padding:10px 12px;border-radius:8px;color:#021;cursor:pointer;font-weight:700}
+    footer{margin-top:28px;color:var(--muted);font-size:13px}
+    .small{font-size:13px;color:var(--muted)}
+    .muted{color:var(--muted)}
+    .top-actions{display:flex;gap:8px;align-items:center;margin-left:auto}
+    .theme-picker{display:flex;gap:6px}
+    .theme-btn{width:28px;height:28px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);cursor:pointer}
+    .auth-box{display:flex;gap:8px;align-items:center}
+    .signin-input{width:200px}
+    @media (max-width:900px){.grid{grid-template-columns:1fr}.avatar{width:76px;height:76px}}
+  </style>
+</head>
+<body data-theme="turkus">
+  <div class="container">
+    <header>
+      <div class="avatar" id="avatar">AB</div>
+      <div>
+        <div style="display:flex;gap:12px;align-items:center">
+          <div>
+            <h1 id="name">Twoje Imię</h1>
+            <p class="lead" id="tagline">Krótki opis / rola — wpisane w Supabase</p>
+          </div>
+          <div class="top-actions">
+            <div class="auth-box card" id="authBox" style="padding:8px 12px">
+              <div id="authState">Nie zalogowano</div>
+            </div>
+            <div class="card small" style="padding:8px 10px">
+              <div style="display:flex;align-items:center;gap:8px">
+                <span class="small muted">Motyw:</span>
+                <div class="theme-picker" aria-hidden>
+                  <button class="theme-btn" title="Turkus" data-theme="turkus" style="background:linear-gradient(45deg,#06b6d4,#7dd3fc)"></button>
+                  <button class="theme-btn" title="Fiolet" data-theme="fiolet" style="background:linear-gradient(45deg,#7c3aed,#a78bfa)"></button>
+                  <button class="theme-btn" title="Czerwony" data-theme="czerwony" style="background:linear-gradient(45deg,#ef4444,#fb7185)"></button>
+                  <button class="theme-btn" title="Niebieski" data-theme="niebieski" style="background:linear-gradient(45deg,#2563eb,#60a5fa)"></button>
+                  <button class="theme-btn" title="Zielony" data-theme="zielony" style="background:linear-gradient(45deg,#16a34a,#86efac)"></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="socials" id="socials" style="margin-top:10px;"></div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <main>
+        <section class="card">
+          <h2>O mnie</h2>
+          <p id="about">Wczytywane z tabeli <code>profile</code> w Supabase (one-row).</p>
+        </section>
+
+        <section class="card">
+          <h2>Projekty</h2>
+          <div class="projects-list" id="projects">
+            <div class="muted">Ładuję projekty z Supabase...</div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>Dodaj projekt (formularz testowy)</h2>
+          <form id="addProjectForm">
+            <input type="text" id="p_title" placeholder="Tytuł projektu" required />
+            <input type="text" id="p_link" placeholder="Link (opcjonalnie)" />
+            <textarea id="p_desc" rows="3" placeholder="Krótki opis"></textarea>
+            <select id="p_type">
+              <option value="app">Aplikacja</option>
+              <option value="site">Strona</option>
+              <option value="tool">Narzędzie</option>
+            </select>
+            <button type="submit">Dodaj projekt</button>
+            <p class="small">W trybie połączonym formularz zapisze w tabeli <code>projects</code> (musisz mieć uprawnienia lub RLS ustawione).</p>
+          </form>
+        </section>
+      </main>
+
+      <aside>
+        <div class="card">
+          <h3>Informacje kontaktowe</h3>
+          <p id="contactInfo">E-mail i Discord w tabeli <code>profile</code></p>
+        </div>
+
+        <div class="card">
+          <h3>Ustawienia Supabase</h3>
+          <p class="small">Wprowadź URL projektu i publiczny anon key (klucz publiczny) — to pozwoli na odczyt danych i uwierzytelnianie. W GitHub Pages użyj tego pliku jako statycznego (index.html) i dodaj redirecty/authorization w Supabase (redirect URL: https://twojadomena.pl/* lub https://twojanazwa.github.io).</p>
+          <input id="supabaseUrl" placeholder="https://xyz.supabase.co" />
+          <input id="supabaseKey" placeholder="public-anon-key" />
+          <button id="connectSupabase">Połącz Supabase</button>
+          <p class="small" id="supStatus">Niepołączono</p>
+        </div>
+
+        <div class="card small">
+          <strong>SQL (sugerowane tabele)</strong>
+          <details>
+            <summary>Przykładowe CREATE TABLE</summary>
+            <pre class="small">-- profile (jedna linia)
+create table profile (
+  id serial primary key,
+  name text,
+  tagline text,
+  about text,
+  avatar_initials text,
+  email text,
+  discord text
+);
+
+-- socials
+create table socials (
+  id serial primary key,
+  name text,
+  url text,
+  ordering int default 0
+);
+
+-- projects
+create table projects (
+  id uuid primary key default uuid_generate_v4(),
+  title text not null,
+  description text,
+  url text,
+  type text,
+  tech text,
+  status text,
+  thumbnail text,
+  created_at timestamptz default now()
+);
+
+-- Upewnij się, że masz rozszerzenie uuid-ossp albo użyj gen_random_uuid() z pgcrypto
+</pre>
+          </details>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      <p class="small">Hostujesz na GitHub Pages — pamiętaj dodać swoją domenę w ustawieniach repo i ustawić redirect URI w Supabase Auth (Authorized redirect URLs) — np. https://twojadomena.pl (lub https://twojanazwa.github.io).</p>
+    </footer>
+  </div>
+
+  <script>
+    // --- Helper DOM functions ---
+    function e(tag, props={}, ...children){ const el=document.createElement(tag); for(const k in props) if(k in el) el[k]=props[k]; children.forEach(c=>{ if(typeof c==='string') el.appendChild(document.createTextNode(c)); else if(c) el.appendChild(c)}); return el }
+
+    // State
+    let supabaseClient = null
+    const state = { profile:null, socials:[], projects:[] }
+
+    // Theme handling
+    document.querySelectorAll('.theme-btn').forEach(b=> b.addEventListener('click', ()=>{ const t=b.getAttribute('data-theme'); document.body.setAttribute('data-theme',t); localStorage.setItem('bio_theme',t) }))
+    const savedTheme = localStorage.getItem('bio_theme') || 'turkus'; document.body.setAttribute('data-theme',savedTheme)
+
+    // Load supabase client dynamically (CDN dist)
+    async function loadSupabaseDist(){ if(window.supabase && window.supabase.createClient) return window.supabase; return new Promise((res,rej)=>{
+      const src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/supabase.min.js'
+      const s=document.createElement('script'); s.src=src; s.onload=()=>res(window.supabase); s.onerror=()=>rej(new Error('CDN load failed')); document.head.appendChild(s)
+    }) }
+
+    document.getElementById('connectSupabase').addEventListener('click', async ()=>{
+      const url = document.getElementById('supabaseUrl').value.trim(); const key = document.getElementById('supabaseKey').value.trim();
+      if(!url||!key){ alert('Wprowadź Supabase URL i anon key.'); return }
+      try{
+        await loadSupabaseDist()
+      }catch(e){ alert('Nie udało się załadować klienta Supabase z CDN: '+e.message); return }
+      // create client (older dist exposes supabase.createClient)
+      try{ supabaseClient = window.supabase.createClient(url,key) }catch(e){ alert('Błąd inicjalizacji klienta: '+e.message); return }
+      document.getElementById('supStatus').textContent = 'Połączono ✅'
+
+      // nasłuch auth state
+      supabaseClient.auth.onAuthStateChange((event, session)=>{
+        renderAuth(session)
+      })
+
+      // fetch data
+      await fetchAll()`
+    })
+
+    // Fetch profile, socials, projects
+    async function fetchAll(){ if(!supabaseClient) return; await Promise.all([fetchProfile(), fetchSocials(), fetchProjects()]) }
+
+    async function fetchProfile(){
+      try{
+        const { data, error } = await supabaseClient.from('profile').select('*').limit(1).maybeSingle()
+        if(error){ console.error('profile error',error); return }
+        if(data){ state.profile=data; applyProfile(data) }
+      }catch(err){ console.error(err) }
+    }
+
+    async function fetchSocials(){
+      try{
+        const { data, error } = await supabaseClient.from('socials').select('*').order('ordering',{ascending:true})
+        if(error){ console.error('socials error',error); return }
+        state.socials = data || []
+        renderSocials()
+      }catch(err){ console.error(err) }
+    }
+
+    async function fetchProjects(){
+      try{
+        const { data, error } = await supabaseClient.from('projects').select('*').order('created_at',{ascending:false})
+        if(error){ console.error('projects error',error); document.getElementById('projects').innerHTML='<div class="muted">Błąd pobierania projektów.</div>'; return }
+        state.projects = data || []
+        renderProjects()
+      }catch(err){ console.error(err) }
+    }
+    
+
+    function applyProfile(p){ document.getElementById('name').textContent = p.name || 'Twoje Imię'; document.getElementById('tagline').textContent = p.tagline || ''; document.getElementById('about').textContent = p.about || ''; document.getElementById('avatar').textContent = (p.avatar_initials) ? p.avatar_initials : initials(p.name || ''); document.getElementById('contactInfo').textContent = `E-mail: ${p.email||'-'} · Discord: ${p.discord||'-'}` }
+
+    function renderSocials(){ const root=document.getElementById('socials'); root.innerHTML=''; state.socials.forEach(s=>{ const a=e('a',{href:s.url,target:'_blank',rel:'noopener'}, s.name); root.appendChild(a) }) }
+
+    function renderProjects(){ const root=document.getElementById('projects'); root.innerHTML=''; if(!state.projects || state.projects.length===0){ root.appendChild(e('div',{},'Brak projektów w tabeli projects.')) ; return }
+      state.projects.forEach(it=>{
+        const el = e('div',{className:'project'});
+        const title = e('div',{}, it.url ? e('a',{href:it.url,target:'_blank',rel:'noopener'}, it.title || '(brak tytułu)') : (it.title||'(brak tytułu)'))
+        const meta = e('div',{className:'meta'}, new Date(it.created_at || Date.now()).toLocaleString())
+        const desc = e('div',{}, it.description || '')
+        el.appendChild(title); el.appendChild(meta); el.appendChild(desc)
+        root.appendChild(el)
+      }) }
+
+    function initials(name){ return name.split(' ').map(n=>n[0]||'').slice(0,2).join('').toUpperCase() }
+
+    // --- Auth UI & helpers ---
+    function renderAuth(session){ const box=document.getElementById('authBox'); box.innerHTML=''
+      if(session && session.user){
+        const u = session.user
+        const name = u.user_metadata?.full_name || u.email || u.user_metadata?.name || 'Użytkownik'
+        const info = e('div',{}, `${name}`)
+        const signout = e('button',{}, 'Wyloguj')
+        signout.addEventListener('click', async ()=>{ await supabaseClient.auth.signOut(); renderAuth(null) })
+        box.appendChild(info); box.appendChild(signout)
+      } else {
+        const emailInput = e('input',{placeholder:'email',className:'signin-input',id:'signinEmail'})
+        const send = e('button',{}, 'Wyślij magic link')
+        send.addEventListener('click', async ()=>{
+          const email = document.getElementById('signinEmail').value.trim(); if(!email){ alert('Podaj email'); return }
+          const { data, error } = await supabaseClient.auth.signInWithOtp({ email })
+          if(error){ alert('Błąd: '+error.message); return }
+          alert('Sprawdź skrzynkę — wysłano magic link (link do logowania).')
+        })
+        const google = e('button',{}, 'Zaloguj przez Google')
+        google.addEventListener('click', async ()=>{
+          await supabaseClient.auth.signInWithOAuth({ provider: 'google' })
+        })
+        box.appendChild(emailInput); box.appendChild(send); box.appendChild(google)
+      }
+    }
+
+    // If user previously connected, try to create client automatically from localStorage
+    window.addEventListener('load', async ()=>{
+      const savedUrl = localStorage.getItem('sb_url'), savedKey = localStorage.getItem('sb_key')
+      if(savedUrl && savedKey){ document.getElementById('supabaseUrl').value = savedUrl; document.getElementById('supabaseKey').value = savedKey; try{ await loadSupabaseDist(); supabaseClient = window.supabase.createClient(savedUrl,savedKey); document.getElementById('supStatus').textContent='Połączono ✅'; supabaseClient.auth.onAuthStateChange((e,s)=>renderAuth(s)); await fetchAll() }catch(e){ console.warn('autoconnect failed',e) } }
+    })
+
+    // Save keys to localStorage when connecting
+    document.getElementById('connectSupabase').addEventListener('click', ()=>{
+      const url=document.getElementById('supabaseUrl').value.trim(), key=document.getElementById('supabaseKey').value.trim()
+      if(url && key){ localStorage.setItem('sb_url',url); localStorage.setItem('sb_key',key) }
+    })
+
+    // Add project form handler
+    document.getElementById('addProjectForm').addEventListener('submit', async (ev)=>{
+      ev.preventDefault(); const title=document.getElementById('p_title').value.trim(); if(!title){ alert('Tytuł wymagany'); return }
+      const link=document.getElementById('p_link').value.trim(), desc=document.getElementById('p_desc').value.trim(), type=document.getElementById('p_type').value
+      const payload = { title, url: link||null, description: desc||null, type }
+      if(supabaseClient){
+        const { data, error } = await supabaseClient.from('projects').insert([payload])
+        if(error){ alert('Błąd zapisu: '+error.message); console.error(error); return }
+        alert('Projekt dodany do Supabase')
+        await fetchProjects()
+      } else {
+        // local-only preview
+        const root=document.getElementById('projects'); const fake={title,description:desc,created_at:new Date().toISOString()}
+        const el=e('div',{className:'project'}); el.innerHTML=`<div><strong>${fake.title}</strong></div><div class="meta">${new Date(fake.created_at).toLocaleString()}</div><div>${fake.description||''}</div>`
+        root.prepend(el); alert('Projekt dodany lokalnie (nie zapisano w Supabase).')
+      }
+      ev.target.reset()
+    })
+
+    // Expose simple API for manual personalization via browser console
+    window.__bioSite = {
+      connect(url,key){ document.getElementById('supabaseUrl').value=url; document.getElementById('supabaseKey').value=key; document.getElementById('connectSupabase').click() },
+      setTheme(t){ document.body.setAttribute('data-theme',t); localStorage.setItem('bio_theme',t) }
+    }
+
+  </script>
+
+  <!-- Uwaga:
+    - W GitHub Pages plik index.html w repo z włączonym GitHub Pages będzie działać jako strona statyczna.
+    - W Supabase -> Authentication -> Settings dodaj Authorized redirect URLs (np. https://twojadomena.pl or https://twojanazwa.github.io) i włącz provider Google.
+    - Klucz anon/public key jest bezpieczny do użycia w publicznych klientach (nie umieszczaj secret keys na froncie).
+    - W produkcji rozważ włączenie RLS (Row Level Security) i polityk, albo proxy server dla operacji krytycznych.
+  -->
+  
+</body>
+</html>
