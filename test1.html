@@ -1,196 +1,89 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <title>Moje Bio | Panel główny</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Moje BIO Supabase</title>
+    <meta name="description" content="Strona bio z projektami podłączona do Supabase, logowanie email i Google, motywy kolorystyczne">
     <style>
         :root {
             --bg: #0f1724;
-            --card: #0b1220ee;
+            --card: #0b1220;
             --accent: #06b6d4;
-            --accent-end: #7dd3fc;
             --muted: #94a3b8;
-            --lead-shadow: 0 8px 28px #0ea5ea30;
+            --accent-start: #06b6d4;
+            --accent-end: #7dd3fc;
         }
+        html,body{height:100%;}
         body {
-            background: linear-gradient(180deg, var(--bg) 0%, #071021 100%);
-            margin: 0;
-            min-height: 100vh;
-            font-family: 'Inter', ui-sans-serif, system-ui, Arial, Helvetica, sans-serif;
+            margin:0;
+            font-family: 'Inter', ui-sans-serif, system-ui,-apple-system,Segoe UI,Roboto,Helvetica Neue,Arial;
+            background: linear-gradient(180deg, var(--bg), #071021 100%);
             color: #e6eef6;
+            -webkit-font-smoothing: antialiased;
         }
-        .site-nav {
-            display: flex;
-            align-items: center;
-            padding: 18px 32px;
-            justify-content: space-between;
-            background: transparent;
-        }
-        .site-nav .logo {
-            font-size: 1.38em;
-            font-weight: bold;
-            color: var(--accent);
-            letter-spacing: 2px;
-            display: flex;
-            align-items: center;
-        }
-        .site-nav .navlink {
-            color: #e6eef6;
-            background: none;
-            text-decoration: none;
-            margin-left: 25px;
-            font-weight: bold;
-            letter-spacing: 1px;
-            font-size: 1em;
-            transition: color 0.15s;
-        }
-        .site-nav .navlink:hover {
-            color: var(--accent-end);
-        }
-        .wrap-main {
+        .container {
             max-width: 980px;
-            margin: 36px auto;
-            padding: 0 14px;
+            margin:36px auto;
+            padding:20px;
         }
-        .leadcard {
-            background: var(--card);
-            border-radius: 18px;
-            box-shadow: var(--lead-shadow);
+        header {
             display: flex;
+            gap: 16px;
             align-items: center;
-            gap: 35px;
-            padding: 35px;
-            margin-bottom: 30px;
+            background: var(--card);
+            padding: 22px 30px 22px 30px;
+            border-radius: 20px;
+            box-shadow: 0 6px 18px rgba(2,6,23,.6);
         }
         .avatar {
-            width: 106px;
-            height: 106px;
-            border-radius: 50%;
-            object-fit: cover;
-            background: #071021;
-            border: 3px solid var(--accent);
+            width: 96px; height: 96px;
+            border-radius: 14px;
+            background: linear-gradient(135deg,var(--accent-start),var(--accent-end));
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 28px; box-shadow: 0 6px 18px rgba(2,6,23,.6);
         }
-        .leadtext {
-            flex: 9;
-        }
-        .leadtext h1 {
-            margin: 0 0 10px 0;
-            font-size: 2.2em;
-            color: var(--accent);
-        }
-        .leadtext h2 {
-            margin: 0 0 10px 0;
-            font-size: 1.2em;
-            color: #e0edfd;
-            font-weight: 500;
-        }
-        .leadtext p {
-            margin: 0;
-            color: var(--muted);
-        }
-        .quicklinks {
-            display: flex;
-            gap: 15px;
-            margin-top: 16px;
-            flex-wrap: wrap;
-        }
-        .quicklink-btn {
+        h1 {margin: 0; font-size: 28px;}
+        p.lead {color: var(--muted); margin: 6px 0 18px;}
+        .card {
             background: var(--card);
-            color: var(--accent);
-            border: 1px solid var(--accent);
-            border-radius: 8px;
-            padding: 8px 18px;
-            font-weight: bold;
-            font-size: 1.05em;
-            cursor: pointer;
-            text-decoration: none;
-            margin-bottom: 10px;
-            transition: background 0.14s, color 0.14s, border-color 0.14s;
-        }
-        .quicklink-btn:hover {
-            background: var(--accent);
-            color: #fff;
-            border-color: #fff0;
-        }
-        /* SOCIALS */
-        .social-section {
-            margin: 16px 0 22px 0;
-            background: var(--card);
+            padding: 16px;
             border-radius: 12px;
-            box-shadow: 0 2px 12px #0ea5ea25;
-            padding: 19px 22px 4px 22px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
+            box-shadow: 0 6px 18px rgba(2,6,23,.6);
+            margin-bottom:18px;
         }
-        .social-link {
-            display: flex;
-            align-items: center;
-            color: var(--accent);
-            font-weight: bold;
-            font-size: 1em;
-            text-decoration: none;
-            border-radius: 7px;
-            background: #232b4170;
-            padding: 7px 17px;
-            box-shadow: 0 0 2px #0002;
-            margin: 0 10px 14px 0;
-            transition: background 0.18s, color 0.18s;
+        .socials {
+            display:flex; gap:8px; flex-wrap:wrap; margin-top:12px;
         }
-        .social-link:hover {
-            background: var(--accent-end);
-            color: #fff;
+        .socials a {
+            padding:8px 12px; border-radius:8px;
+            background: rgba(255,255,255,0.03);
+            text-decoration:none;
+            color:inherit; font-weight:600;
+            display: flex; align-items: center;
         }
-        .social-icon {
-            width: 27px;
-            height: 27px;
-            margin-right: 10px;
+        .socials img {
+            width:23px; height:23px; margin-right:7px;
         }
-        .card-section {
-            margin-top: 0px;
-            border-radius: 16px;
-            background: var(--card);
-            box-shadow: 0 3px 22px #0ea5ea14;
-            padding: 32px 24px;
-        }
-        .card-section h2 {
-            color: var(--accent);
-            font-size: 1.3em;
-            margin-bottom: 18px;
-        }
-        @media (max-width: 700px) {
-            .leadcard { flex-direction: column; align-items: flex-start; gap: 18px; padding: 16px }
-            .avatar { width: 74px; height: 74px }
-            .wrap-main { padding: 0 1px }
-            .card-section { padding: 18px 6px }
-            .social-section { padding: 13px 5px 2px 5px }
-        }
+        .grid { display: grid; grid-template-columns: 1fr 330px; gap:18px; }
+        @media (max-width:900px) { .grid {grid-template-columns: 1fr;} }
+        .projects-list { display: flex; flex-direction:column; gap:12px;}
+        .project { padding:12px; border-radius:10px;
+            background: linear-gradient(180deg,rgba(255,255,255,0.02),transparent); }
+        .meta { color:var(--muted); font-size:13px;}
+        .small { font-size:13px; color: var(--muted);}
+        .quicklinks {margin-top:18px;}
+        .quicklink-btn {background:none;color:var(--accent);border: 1.5px solid var(--accent);border-radius:8px;padding:8px 20px;font-weight:700;font-size:1.02em;cursor:pointer;text-decoration:none;margin-right:8px;transition:.18s;}
+        .quicklink-btn:hover {background:var(--accent);color:#fff;}
     </style>
 </head>
 <body>
-    <nav class="site-nav">
-        <span class="logo">BioPanel</span>
-        <div>
-            <a href="projekty.html" class="navlink">Projekty</a>
-            <a href="zamowienia.html" class="navlink">Zamówienia</a>
-            <a href="domeny.html" class="navlink">Domeny</a>
-            <a href="legitki.html" class="navlink">Legitki</a>
-            <a href="konto.html" class="navlink">Konto</a>
-            <a href="logowanie.html" class="navlink">Logowanie</a>
-        </div>
-    </nav>
-    <div class="wrap-main">
-        <div class="leadcard">
-            <img src="https://api.dicebear.com/7.x/identicon/svg?seed=userbio"
-                 class="avatar" alt="Avatar">
-            <div class="leadtext">
-                <h1>Twoje BioPanel — witaj!</h1>
-                <h2>Podkast Twoich projektów, wizytówka i profesjonalne miejsce do prezentacji swoich realizacji.</h2>
-                <p>
-                    Zarządzaj swoimi projektami, zamówieniami, domenami i opiniami w jednym miejscu. Wszystko responsywne, wygląd nowoczesny, idealne na PC oraz telefon!
-                </p>
+    <div class="container">
+        <header>
+            <div class="avatar" id="avatar">AB</div>
+            <div style="flex:1">
+                <h1 id="name" style="color:var(--accent)">Twoje Imię</h1>
+                <p class="lead" id="tagline">Krótki opis / rola — wpisane w Supabase</p>
                 <div class="quicklinks">
                     <a href="projekty.html" class="quicklink-btn">Projekty</a>
                     <a href="zamowienia.html" class="quicklink-btn">Zamówienia</a>
@@ -198,47 +91,103 @@
                     <a href="legitki.html" class="quicklink-btn">Legitki</a>
                 </div>
             </div>
-        </div>
+        </header>
 
-        <section class="social-section" id="social-media">
-            <!-- Social media będą tu ładowane JS (demo poniżej lub dynamicznie z Supabase) -->
-        </section>
+        <div class="socials" id="socials"></div>
 
-        <section class="card-section">
-            <h2>O mnie</h2>
-            <p>
-                Jestem entuzjastą rozwoju webowego, automatyzacji i tworzenia użytecznych narzędzi.<br>
-                <b>Dodaję projekty, integruję domeny i zbieram realne oceny własnych usług.</b>
-            </p>
-            <div id="projekty-index"></div>
-        </section>
+        <main class="grid">
+            <section>
+                <section class="card">
+                    <h2 style="color:var(--accent)">O mnie</h2>
+                    <p id="about">
+                        Wczytywane z tabeli <code>profile</code> w Supabase (lub podmień na własny tekst)
+                    </p>
+                </section>
+                <section class="card">
+                    <h2 style="color:var(--accent)">Projekty</h2>
+                    <div class="projects-list" id="projects">
+                        <div class="small">Ładuj projekty z Supabase...</div>
+                    </div>
+                </section>
+            </section>
+            <aside>
+                <div class="card">
+                    <h3>Informacje kontaktowe</h3>
+                    <p id="contactInfo">E-mail i Discord w tabeli <code>profile</code></p>
+                </div>
+                <div class="card small">
+                    <b>SQL sugerowane tabele</b>
+                    <details>
+                        <summary>Przykładowe <code>CREATE TABLE</code></summary>
+<pre class="small">-- profile jedna linia
+create table profile (
+    id serial primary key,
+    name text,
+    tagline text,
+    about text,
+    avatarinitials text,
+    email text,
+    discord text
+);
+/* -- socials
+create table socials (
+    id serial primary key,
+    name text,
+    url text,
+    ordering int default 0
+);
+-- projects
+create table projects (
+    id uuid primary key default uuid_generate_v4(),
+    title text not null,
+    description text,
+    url text,
+    type text,
+    tech text,
+    status text,
+    thumbnail text,
+    created_at timestamptz default now()
+);
+*/
+</pre>
+                    </details>
+                </div>
+            </aside>
+        </main>
+        <footer>
+            <p class="small">Hostujesz na GitHub Pages? <br> Pamiętaj dodać swoją domenę w ustawieniach repo oraz ustawić redirect URI w Supabase Auth (Authorized redirect URLs).</p>
+        </footer>
     </div>
     <script>
-        // Supabase zawsze wpisany!
-        const supabase = supabase.createClient(
-            "https://nugkonuaednqzhhxvptq.supabase.co",
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im51Z2tvbnVhZWRucXpoaHh2cHRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyMTk5NDEsImV4cCI6MjA3MTc5NTk0MX0.tCNCVi-hmvz_cIbTqOUHgpmxKpy6epQ7v29Q7wj0kBU"
-        );
-        // Social media: podmień na fetch z Supabase (tabela np. socials)
-        const demoSocials = [
-            { name: "Discord", url: "https://discord.com/users/twojUserID", icon: "https://cdn.simpleicons.org/discord/5865F2/fff" },
-            { name: "GitHub", url: "https://github.com/twojnick", icon: "https://cdn.simpleicons.org/github/fff/23282e" },
-            { name: "LinkedIn", url: "https://linkedin.com/in/twójprofil", icon: "https://cdn.simpleicons.org/linkedin/0077B5/fff" }
-        ];
-        function renderSocials(arr) {
-            document.getElementById("social-media").innerHTML = arr.map(s =>
-                `<a class="social-link" href="${s.url}" target="_blank" rel="noopener">
-                    <img src="${s.icon}" class="social-icon" alt="${s.name}">${s.name}
-                </a>`
-            ).join("");
-        }
-        renderSocials(demoSocials); // zamień na fetch z bazy
+        // Supabase - demo dane, potem podmień na fetch z bazy!
+        // Avatar/demo initials
+        document.getElementById("avatar").textContent = "AB";
+        // Nazwa i lead
+        document.getElementById("name").textContent = "Twoje Imię";
+        document.getElementById("tagline").textContent = "Krótki opis / rola — wpisane w Supabase";
+        document.getElementById("about").textContent = "Jestem entuzjastą rozwoju webowego, automatyzacji i tworzenia użytecznych narzędzi. Dodaję projekty, integruję domeny i zbieram realne oceny własnych usług.";
+        document.getElementById("contactInfo").textContent = "E-mail: twoj@example.com, Discord: twojnick";
 
-        // Projekty pod "O mnie" – demo (fetch z supabase docelowo)
-        document.getElementById("projekty-index").innerHTML = [
-            {nazwa: "Panel CRM", opis: "Zarządzanie klientami, powiadomienia, automatyzacje."},
-            {nazwa: "Landing dla marki", opis: "Indywidualny, responsywny projekt pod kampanię."}
-        ].map(p => `<b>${p.nazwa}</b>: ${p.opis}`).join("<br>");
+        // Social media (demo) — zamień na fetch z Supabase
+        const socialsDemo = [
+            {name:"Discord",url:"https://discord.com/users/twojUserID",icon:"https://cdn.simpleicons.org/discord/5865F2/fff"},
+            {name:"GitHub",url:"https://github.com/twojnick",icon:"https://cdn.simpleicons.org/github/fff/23282e"},
+            {name:"LinkedIn",url:"https://linkedin.com/in/twójprofil",icon:"https://cdn.simpleicons.org/linkedin/0077B5/fff"}
+        ];
+        document.getElementById("socials").innerHTML =
+            socialsDemo.map(s =>
+                `<a href="${s.url}" target="_blank" rel="noopener">
+                    <img src="${s.icon}" alt="${s.name} icon"/>${s.name}
+                </a>`).join("");
+
+        // Projekty demo (zamień na fetch z Supabase)
+        document.getElementById("projects").innerHTML =
+            [
+                {title: "Panel CRM", description: "Zarządzanie klientami, powiadomienia, automatyzacje."},
+                {title: "Landing dla marki", description: "Indywidualny, responsywny projekt pod kampanię."}
+            ].map(p =>
+                `<div class="project"><b>${p.title}</b><div class="meta"></div><div>${p.description}</div></div>`
+            ).join("");
     </script>
 </body>
 </html>
