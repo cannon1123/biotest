@@ -2,171 +2,123 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Moje Bio - Projekty, Zamówienia, Portfolio</title>
+    <title>Moje Bio Discord Style</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <style>
-        /* --- MOTYWY --- */
-        :root {
-            /* Wybierz TYLKO JEDEN z poniższych motywów, kopiując go tutaj (pozostałe zakomentuj) */
-            /* --- MOTYW 1: Nowoczesny Niebieski --- */
-            --color-bg: #f6f6f6;
-            --color-header: #34495e;
-            --color-nav: #2c3e50;
-            --color-primary: #2980b9;
-            --color-accent: #16a085;
-            --color-text: #34495e;
-            --color-card: #fff;
-            --color-shadow: rgba(0,0,0,0.09);
-
-            /* --- MOTYW 2: Jasny Minimalistyczny ---
-            --color-bg: #ffffff;
-            --color-header: #ececec;
-            --color-nav: #dbeafe;
-            --color-primary: #2563eb;
-            --color-accent: #0ea5e9;
-            --color-text: #1e293b;
-            --color-card: #fafafa;
-            --color-shadow: rgba(60,60,70,0.07);
-            */
-
-            /* --- MOTYW 3: Ciemny Pro ---
-            --color-bg: #181a1b;
-            --color-header: #22252a;
-            --color-nav: #16191c;
-            --color-primary: #1283da;
-            --color-accent: #06d6a0;
-            --color-text: #f1f1f1;
-            --color-card: #23272e;
-            --color-shadow: rgba(0,0,0,0.22);
-            */
-
-            /* --- MOTYW 4: Biznesowy Granat/Złoto ---
-            --color-bg: #f1f3f7;
-            --color-header: #182848;
-            --color-nav: #274b74;
-            --color-primary: #efd807;
-            --color-accent: #d5a331;
-            --color-text: #182848;
-            --color-card: #fff;
-            --color-shadow: rgba(230,170,40,0.1);
-            */
-        }
-
         body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: var(--color-bg);
-            color: var(--color-text);
+            font-family: 'Segoe UI', 'Montserrat', Arial, sans-serif;
+            background: #23272a;
             margin: 0;
-            padding: 0;
+            color: #FFF;
         }
-        header {
-            background: var(--color-header);
-            color: var(--color-card);
-            padding: 32px 0 20px 0;
+        #sidebar {
+            background: linear-gradient(180deg, #36393f 0%, #23272a 100%);
+            min-width: 250px;
+            height: 100vh;
+            position: fixed;
+            left: 0; top: 0;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+        }
+        #sidebar h1 {
+            margin: 25px 0 8px 0;
+            font-size: 1.5em;
+            color: #43b581;
+            font-weight: 700;
             text-align: center;
+            letter-spacing: 0.5px;
         }
-        nav {
-            background: var(--color-nav);
-            color: var(--color-card);
-            padding: 10px 0;
-            text-align: center;
+        #sidebar nav {
+            display: flex;
+            flex-direction: column;
         }
-        nav a {
-            color: var(--color-card);
+        #sidebar nav a {
+            padding: 12px 26px;
+            color: #b9bbbe;
             text-decoration: none;
-            margin: 0 15px;
-            font-weight: bold;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+            margin-bottom: 1px;
+            border-radius: 6px;
+            transition: background 0.17s, color 0.17s;
         }
-        .container {
+        #sidebar nav a.active, #sidebar nav a:hover {
+            background: #393c42;
+            color: #43b581;
+        }
+        main {
+            margin-left: 270px;
             max-width: 900px;
-            margin: 30px auto;
-            background: var(--color-card);
-            border-radius: 12px;
-            box-shadow: 0 2px 10px var(--color-shadow);
-            padding: 30px;
-        }
-        h2 {
-            color: var(--color-text);
-            margin-bottom: 16px;
+            padding: 35px 30px;
         }
         section {
-            margin-bottom: 36px;
+            margin-bottom: 30px;
+            background: #2f3136;
+            border-radius: 8px;
+            box-shadow: 0 1px 8px rgba(0,0,0,0.15);
+            padding: 18px 24px;
+        }
+        h2 {
+            color: #43b581;
+            margin-bottom: 10px;
+            font-size: 1.15em;
+        }
+        .button {
+            background: linear-gradient(90deg,#7289da 0%,#43b581 90%);
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 22px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            margin-right: 14px;
+            margin-bottom: 7px;
+            transition: filter 0.2s;
+        }
+        .button:hover {
+            filter: brightness(1.10);
+        }
+        input, select, textarea {
+            margin: 12px 0 15px 0;
+            padding: 9px;
+            width: 100%;
+            border-radius: 5px;
+            border: 1px solid #40444b;
+            font-size: 15px;
+            background: #23272a;
+            color: #fff;
+        }
+        label {
+            font-weight: bold;
+            color: #7289da;
         }
         .hidden {
             display: none;
         }
-        .button {
-            background: var(--color-primary);
-            color: var(--color-card);
-            border: none;
-            padding: 8px 22px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: filter 0.2s;
-        }
-        .button:hover {
-            filter: brightness(1.07);
-        }
-        .button:disabled {
-            background: #999;
-        }
-        label {
-            font-weight: bold;
-        }
-        input, select, textarea {
-            margin: 10px 0 18px 0;
-            padding: 8px;
-            width: 100%;
-            border-radius: 5px;
-            border: 1px solid #bbb;
-            font-size: 16px;
-            background: var(--color-bg);
-            color: var(--color-text);
-        }
-        /* Motyw wyświetlania przycisków zmiany stylu */
-        .theme-switch {
-            float: right;
-            margin-right: 38px;
-        }
-        .theme-switch button {
-            background: var(--color-accent);
-            color: var(--color-header);
-            border: none;
-            margin-left: 10px;
-            border-radius: 5px;
-            padding: 4px 14px;
-            font-size: 14px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .theme-switch button.active {
-            outline: 2px solid var(--color-primary);
+        @media (max-width: 850px) {
+            main { margin-left: 0; padding: 13px }
+            #sidebar { position: static; height: auto; width: 100%; flex-direction: row; }
+            #sidebar nav { flex-direction: row; }
+            #sidebar nav a { font-size: 0.9em; padding: 10px 11px; }
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Moje Bio</h1>
-        <div class="theme-switch">
-            <button onclick="setTheme('blue')" id="th-blue" class="active">Niebieski</button>
-            <button onclick="setTheme('light')" id="th-light">Minimal</button>
-            <button onclick="setTheme('dark')" id="th-dark">Ciemny</button>
-            <button onclick="setTheme('gold')" id="th-gold">Granat/Złoto</button>
-        </div>
-        <p>Portfolio projektów, zamówienia, profesjonalne konto</p>
-    </header>
-    <nav>
-        <a href="#projekty">Projekty</a>
-        <a href="#zamowienia">Zamówienia</a>
-        <a href="#domeny">Strony na domenach</a>
-        <a href="#legitek">Legitki/Oceny</a>
-        <a href="#konto">Ustawienia konta</a>
-        <a href="#logowanie" id="login-nav">Logowanie</a>
-    </nav>
-    <div class="container">
+    <div id="sidebar">
+        <h1>Bio</h1>
+        <nav>
+            <a href="#projekty" id="nav-projekty">Projekty</a>
+            <a href="#zamowienia" id="nav-zam">Zamówienia</a>
+            <a href="#domeny" id="nav-dom">Domeny</a>
+            <a href="#legitek" id="nav-leg">Legitki</a>
+            <a href="#konto" id="nav-acc">Konto</a>
+            <a href="#logowanie" id="nav-log">Logowanie</a>
+        </nav>
+    </div>
+    <main>
         <section id="projekty">
             <h2>Moje Projekty</h2>
             <div id="projekty-list"></div>
@@ -176,7 +128,7 @@
             <div id="zamowienia-list"></div>
         </section>
         <section id="domeny">
-            <h2>Strony na kupionych domenach</h2>
+            <h2>Strony na Domenach</h2>
             <div id="domeny-list"></div>
         </section>
         <section id="legitek">
@@ -184,7 +136,7 @@
             <div id="legitek-list"></div>
         </section>
         <section id="konto">
-            <h2>Ustawienia konta zawodowe</h2>
+            <h2>Ustawienia Konta</h2>
             <div id="account-settings"></div>
         </section>
         <section id="logowanie">
@@ -193,92 +145,36 @@
             <button class="button" onclick="loginGoogle()">Logowanie przez Google</button>
             <div id="user-info"></div>
         </section>
-    </div>
+    </main>
     <script>
-        // Supabase setup
-        const supabaseUrl = 'https://YOUR-PROJECT-NAME.supabase.co';
-        const supabaseKey = 'YOUR-ANON-KEY';
+        // Automatycznie wpisany Twój Supabase
+        const supabaseUrl = 'https://nugkonuaednqzhhxvptq.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im51Z2tvbnVhZWRucXpoaHh2cHRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyMTk5NDEsImV4cCI6MjA3MTc5NTk0MX0.tCNCVi-hmvz_cIbTqOUHgpmxKpy6epQ7v29Q7wj0kBU';
         const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-        // --- Logowanie ---
+        // Logowanie
         async function loginEmail() {
             const email = prompt("Podaj email:");
             if (!email) return;
             const { error } = await supabase.auth.signInWithOtp({ email });
-            document.getElementById("user-info").innerHTML = error ? "Błąd: " + error.message : "Sprawdź email";
+            document.getElementById("user-info").innerHTML = error ? "Błąd: " + error.message : "Sprawdź email!";
         }
         async function loginGoogle() {
             const { error } = await supabase.auth.signInWithOAuth({ provider: 'google' });
             if (error) alert("Błąd logowania: " + error.message);
         }
-
-        // --- Pokazywanie danych (nieaktywne, placeholder) ---
-        // Dodamy kod do pobierania z supabase w kolejnych wersjach
-
-        // --- UI helper ---
+        // Sidebar navigation
         function showSection(id) {
-            document.querySelectorAll('section').forEach(sec => sec.classList.add('hidden'));
+            document.querySelectorAll('main section').forEach(sec => sec.classList.add('hidden'));
             document.getElementById(id).classList.remove('hidden');
+            document.querySelectorAll("#sidebar nav a").forEach(a => a.classList.remove('active'));
+            document.querySelector(`#nav-${id.substring(0,3)}`).classList.add('active');
         }
-        // Hash navigation
         window.addEventListener('hashchange', () => {
-            const hash = window.location.hash.replace('#','');
+            const hash = window.location.hash.replace('#', '');
             showSection(hash || 'projekty');
         });
-        // Init
-        showSection(window.location.hash.replace('#','') || 'projekty');
-
-        // --- Motyw przełącznik ---
-        function setTheme(name) {
-            const roots = document.documentElement.style;
-            document.querySelectorAll('.theme-switch button').forEach(btn => btn.classList.remove('active'));
-            switch (name) {
-                case 'blue':
-                    roots.setProperty('--color-bg', '#f6f6f6');
-                    roots.setProperty('--color-header', '#34495e');
-                    roots.setProperty('--color-nav', '#2c3e50');
-                    roots.setProperty('--color-primary', '#2980b9');
-                    roots.setProperty('--color-accent', '#16a085');
-                    roots.setProperty('--color-text', '#34495e');
-                    roots.setProperty('--color-card', '#fff');
-                    roots.setProperty('--color-shadow', 'rgba(0,0,0,0.09)');
-                    document.getElementById('th-blue').classList.add('active');
-                    break;
-                case 'light':
-                    roots.setProperty('--color-bg', '#ffffff');
-                    roots.setProperty('--color-header', '#ececec');
-                    roots.setProperty('--color-nav', '#dbeafe');
-                    roots.setProperty('--color-primary', '#2563eb');
-                    roots.setProperty('--color-accent', '#0ea5e9');
-                    roots.setProperty('--color-text', '#1e293b');
-                    roots.setProperty('--color-card', '#fafafa');
-                    roots.setProperty('--color-shadow', 'rgba(60,60,70,0.07)');
-                    document.getElementById('th-light').classList.add('active');
-                    break;
-                case 'dark':
-                    roots.setProperty('--color-bg', '#181a1b');
-                    roots.setProperty('--color-header', '#22252a');
-                    roots.setProperty('--color-nav', '#16191c');
-                    roots.setProperty('--color-primary', '#1283da');
-                    roots.setProperty('--color-accent', '#06d6a0');
-                    roots.setProperty('--color-text', '#f1f1f1');
-                    roots.setProperty('--color-card', '#23272e');
-                    roots.setProperty('--color-shadow', 'rgba(0,0,0,0.22)');
-                    document.getElementById('th-dark').classList.add('active');
-                    break;
-                case 'gold':
-                    roots.setProperty('--color-bg', '#f1f3f7');
-                    roots.setProperty('--color-header', '#182848');
-                    roots.setProperty('--color-nav', '#274b74');
-                    roots.setProperty('--color-primary', '#efd807');
-                    roots.setProperty('--color-accent', '#d5a331');
-                    roots.setProperty('--color-text', '#182848');
-                    roots.setProperty('--color-card', '#fff');
-                    roots.setProperty('--color-shadow', 'rgba(230,170,40,0.1)');
-                    document.getElementById('th-gold').classList.add('active');
-                    break;
-            }
-        }
+        showSection(window.location.hash.replace('#', '') || 'projekty');
     </script>
 </body>
 </html>
