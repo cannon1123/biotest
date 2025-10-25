@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Moje Bio - Projekty, Zamówienia, Portfolio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <style>
+        /* --- MOTYWY --- */
+        :root {
+            /* Wybierz TYLKO JEDEN z poniższych motywów, kopiując go tutaj (pozostałe zakomentuj) */
+            /* --- MOTYW 1: Nowoczesny Niebieski --- */
+            --color-bg: #f6f6f6;
+            --color-header: #34495e;
+            --color-nav: #2c3e50;
+            --color-primary: #2980b9;
+            --color-accent: #16a085;
+            --color-text: #34495e;
+            --color-card: #fff;
+            --color-shadow: rgba(0,0,0,0.09);
+
+            /* --- MOTYW 2: Jasny Minimalistyczny ---
+            --color-bg: #ffffff;
+            --color-header: #ececec;
+            --color-nav: #dbeafe;
+            --color-primary: #2563eb;
+            --color-accent: #0ea5e9;
+            --color-text: #1e293b;
+            --color-card: #fafafa;
+            --color-shadow: rgba(60,60,70,0.07);
+            */
+
+            /* --- MOTYW 3: Ciemny Pro ---
+            --color-bg: #181a1b;
+            --color-header: #22252a;
+            --color-nav: #16191c;
+            --color-primary: #1283da;
+            --color-accent: #06d6a0;
+            --color-text: #f1f1f1;
+            --color-card: #23272e;
+            --color-shadow: rgba(0,0,0,0.22);
+            */
+
+            /* --- MOTYW 4: Biznesowy Granat/Złoto ---
+            --color-bg: #f1f3f7;
+            --color-header: #182848;
+            --color-nav: #274b74;
+            --color-primary: #efd807;
+            --color-accent: #d5a331;
+            --color-text: #182848;
+            --color-card: #fff;
+            --color-shadow: rgba(230,170,40,0.1);
+            */
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: var(--color-bg);
+            color: var(--color-text);
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background: var(--color-header);
+            color: var(--color-card);
+            padding: 32px 0 20px 0;
+            text-align: center;
+        }
+        nav {
+            background: var(--color-nav);
+            color: var(--color-card);
+            padding: 10px 0;
+            text-align: center;
+        }
+        nav a {
+            color: var(--color-card);
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            background: var(--color-card);
+            border-radius: 12px;
+            box-shadow: 0 2px 10px var(--color-shadow);
+            padding: 30px;
+        }
+        h2 {
+            color: var(--color-text);
+            margin-bottom: 16px;
+        }
+        section {
+            margin-bottom: 36px;
+        }
+        .hidden {
+            display: none;
+        }
+        .button {
+            background: var(--color-primary);
+            color: var(--color-card);
+            border: none;
+            padding: 8px 22px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: filter 0.2s;
+        }
+        .button:hover {
+            filter: brightness(1.07);
+        }
+        .button:disabled {
+            background: #999;
+        }
+        label {
+            font-weight: bold;
+        }
+        input, select, textarea {
+            margin: 10px 0 18px 0;
+            padding: 8px;
+            width: 100%;
+            border-radius: 5px;
+            border: 1px solid #bbb;
+            font-size: 16px;
+            background: var(--color-bg);
+            color: var(--color-text);
+        }
+        /* Motyw wyświetlania przycisków zmiany stylu */
+        .theme-switch {
+            float: right;
+            margin-right: 38px;
+        }
+        .theme-switch button {
+            background: var(--color-accent);
+            color: var(--color-header);
+            border: none;
+            margin-left: 10px;
+            border-radius: 5px;
+            padding: 4px 14px;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .theme-switch button.active {
+            outline: 2px solid var(--color-primary);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Moje Bio</h1>
+        <div class="theme-switch">
+            <button onclick="setTheme('blue')" id="th-blue" class="active">Niebieski</button>
+            <button onclick="setTheme('light')" id="th-light">Minimal</button>
+            <button onclick="setTheme('dark')" id="th-dark">Ciemny</button>
+            <button onclick="setTheme('gold')" id="th-gold">Granat/Złoto</button>
+        </div>
+        <p>Portfolio projektów, zamówienia, profesjonalne konto</p>
+    </header>
+    <nav>
+        <a href="#projekty">Projekty</a>
+        <a href="#zamowienia">Zamówienia</a>
+        <a href="#domeny">Strony na domenach</a>
+        <a href="#legitek">Legitki/Oceny</a>
+        <a href="#konto">Ustawienia konta</a>
+        <a href="#logowanie" id="login-nav">Logowanie</a>
+    </nav>
+    <div class="container">
+        <section id="projekty">
+            <h2>Moje Projekty</h2>
+            <div id="projekty-list"></div>
+        </section>
+        <section id="zamowienia">
+            <h2>Projekty na Zamówienie</h2>
+            <div id="zamowienia-list"></div>
+        </section>
+        <section id="domeny">
+            <h2>Strony na kupionych domenach</h2>
+            <div id="domeny-list"></div>
+        </section>
+        <section id="legitek">
+            <h2>Legitki / Oceny</h2>
+            <div id="legitek-list"></div>
+        </section>
+        <section id="konto">
+            <h2>Ustawienia konta zawodowe</h2>
+            <div id="account-settings"></div>
+        </section>
+        <section id="logowanie">
+            <h2>Zaloguj się</h2>
+            <button class="button" onclick="loginEmail()">Logowanie przez email</button>
+            <button class="button" onclick="loginGoogle()">Logowanie przez Google</button>
+            <div id="user-info"></div>
+        </section>
+    </div>
+    <script>
+        // Supabase setup
+        const supabaseUrl = 'https://YOUR-PROJECT-NAME.supabase.co';
+        const supabaseKey = 'YOUR-ANON-KEY';
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        // --- Logowanie ---
+        async function loginEmail() {
+            const email = prompt("Podaj email:");
+            if (!email) return;
+            const { error } = await supabase.auth.signInWithOtp({ email });
+            document.getElementById("user-info").innerHTML = error ? "Błąd: " + error.message : "Sprawdź email";
+        }
+        async function loginGoogle() {
+            const { error } = await supabase.auth.signInWithOAuth({ provider: 'google' });
+            if (error) alert("Błąd logowania: " + error.message);
+        }
+
+        // --- Pokazywanie danych (nieaktywne, placeholder) ---
+        // Dodamy kod do pobierania z supabase w kolejnych wersjach
+
+        // --- UI helper ---
+        function showSection(id) {
+            document.querySelectorAll('section').forEach(sec => sec.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+        }
+        // Hash navigation
+        window.addEventListener('hashchange', () => {
+            const hash = window.location.hash.replace('#','');
+            showSection(hash || 'projekty');
+        });
+        // Init
+        showSection(window.location.hash.replace('#','') || 'projekty');
+
+        // --- Motyw przełącznik ---
+        function setTheme(name) {
+            const roots = document.documentElement.style;
+            document.querySelectorAll('.theme-switch button').forEach(btn => btn.classList.remove('active'));
+            switch (name) {
+                case 'blue':
+                    roots.setProperty('--color-bg', '#f6f6f6');
+                    roots.setProperty('--color-header', '#34495e');
+                    roots.setProperty('--color-nav', '#2c3e50');
+                    roots.setProperty('--color-primary', '#2980b9');
+                    roots.setProperty('--color-accent', '#16a085');
+                    roots.setProperty('--color-text', '#34495e');
+                    roots.setProperty('--color-card', '#fff');
+                    roots.setProperty('--color-shadow', 'rgba(0,0,0,0.09)');
+                    document.getElementById('th-blue').classList.add('active');
+                    break;
+                case 'light':
+                    roots.setProperty('--color-bg', '#ffffff');
+                    roots.setProperty('--color-header', '#ececec');
+                    roots.setProperty('--color-nav', '#dbeafe');
+                    roots.setProperty('--color-primary', '#2563eb');
+                    roots.setProperty('--color-accent', '#0ea5e9');
+                    roots.setProperty('--color-text', '#1e293b');
+                    roots.setProperty('--color-card', '#fafafa');
+                    roots.setProperty('--color-shadow', 'rgba(60,60,70,0.07)');
+                    document.getElementById('th-light').classList.add('active');
+                    break;
+                case 'dark':
+                    roots.setProperty('--color-bg', '#181a1b');
+                    roots.setProperty('--color-header', '#22252a');
+                    roots.setProperty('--color-nav', '#16191c');
+                    roots.setProperty('--color-primary', '#1283da');
+                    roots.setProperty('--color-accent', '#06d6a0');
+                    roots.setProperty('--color-text', '#f1f1f1');
+                    roots.setProperty('--color-card', '#23272e');
+                    roots.setProperty('--color-shadow', 'rgba(0,0,0,0.22)');
+                    document.getElementById('th-dark').classList.add('active');
+                    break;
+                case 'gold':
+                    roots.setProperty('--color-bg', '#f1f3f7');
+                    roots.setProperty('--color-header', '#182848');
+                    roots.setProperty('--color-nav', '#274b74');
+                    roots.setProperty('--color-primary', '#efd807');
+                    roots.setProperty('--color-accent', '#d5a331');
+                    roots.setProperty('--color-text', '#182848');
+                    roots.setProperty('--color-card', '#fff');
+                    roots.setProperty('--color-shadow', 'rgba(230,170,40,0.1)');
+                    document.getElementById('th-gold').classList.add('active');
+                    break;
+            }
+        }
+    </script>
+</body>
+</html>
