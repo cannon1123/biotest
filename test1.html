@@ -49,17 +49,6 @@
         .site-nav .navlink:hover {
             color: var(--accent-end);
         }
-        .theme-btn {
-            background: linear-gradient(90deg, var(--accent), var(--accent-end) 80%);
-            border: none;
-            color: #fff;
-            padding: 7px 18px;
-            font-weight: bold;
-            border-radius: 20px;
-            margin-left: 18px;
-            cursor: pointer;
-            font-size: 1em;
-        }
         .wrap-main {
             max-width: 980px;
             margin: 36px auto;
@@ -127,11 +116,11 @@
         }
         /* SOCIALS */
         .social-section {
-            margin: 18px 0 18px 0;
+            margin: 16px 0 22px 0;
             background: var(--card);
             border-radius: 12px;
             box-shadow: 0 2px 12px #0ea5ea25;
-            padding: 25px 22px 8px 22px;
+            padding: 19px 22px 4px 22px;
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
@@ -160,7 +149,7 @@
             margin-right: 10px;
         }
         .card-section {
-            margin-top: 16px;
+            margin-top: 0px;
             border-radius: 16px;
             background: var(--card);
             box-shadow: 0 3px 22px #0ea5ea14;
@@ -190,7 +179,6 @@
             <a href="legitki.html" class="navlink">Legitki</a>
             <a href="konto.html" class="navlink">Konto</a>
             <a href="logowanie.html" class="navlink">Logowanie</a>
-            <button class="theme-btn" onclick="randomTheme()">Zaskocz mnie!</button>
         </div>
     </nav>
     <div class="wrap-main">
@@ -213,13 +201,13 @@
         </div>
 
         <section class="social-section" id="social-media">
-            <!-- Social media będą tu ładowane JS (dynamicznie z bazy lub demo poniżej) -->
+            <!-- Social media będą tu ładowane JS (demo poniżej lub dynamicznie z Supabase) -->
         </section>
 
         <section class="card-section">
             <h2>O mnie</h2>
             <p>
-                Jestem entuzjastą rozwoju webowego, automatyzacji i tworzenia użytecznych narzędzi. <br>
+                Jestem entuzjastą rozwoju webowego, automatyzacji i tworzenia użytecznych narzędzi.<br>
                 <b>Dodaję projekty, integruję domeny i zbieram realne oceny własnych usług.</b>
             </p>
             <div id="projekty-index"></div>
@@ -231,19 +219,6 @@
             "https://nugkonuaednqzhhxvptq.supabase.co",
             "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im51Z2tvbnVhZWRucXpoaHh2cHRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyMTk5NDEsImV4cCI6MjA3MTc5NTk0MX0.tCNCVi-hmvz_cIbTqOUHgpmxKpy6epQ7v29Q7wj0kBU"
         );
-        // Motywy
-        const themes = [
-            { accent: "#06b6d4", end: "#7dd3fc" },
-            { accent: "#7c3aed", end: "#a78bfa" },
-            { accent: "#2563eb", end: "#60a5fa" },
-            { accent: "#16a34a", end: "#86efac" },
-            { accent: "#ef4444", end: "#fb7185" }
-        ];
-        function randomTheme() {
-            const th = themes[Math.floor(Math.random() * themes.length)];
-            document.documentElement.style.setProperty('--accent', th.accent);
-            document.documentElement.style.setProperty('--accent-end', th.end);
-        }
         // Social media: podmień na fetch z Supabase (tabela np. socials)
         const demoSocials = [
             { name: "Discord", url: "https://discord.com/users/twojUserID", icon: "https://cdn.simpleicons.org/discord/5865F2/fff" },
@@ -264,9 +239,6 @@
             {nazwa: "Panel CRM", opis: "Zarządzanie klientami, powiadomienia, automatyzacje."},
             {nazwa: "Landing dla marki", opis: "Indywidualny, responsywny projekt pod kampanię."}
         ].map(p => `<b>${p.nazwa}</b>: ${p.opis}`).join("<br>");
-
-        // Domyślny motyw przy wejściu
-        randomTheme();
     </script>
 </body>
 </html>
